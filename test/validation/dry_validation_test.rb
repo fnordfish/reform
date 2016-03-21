@@ -103,25 +103,25 @@ class ValidationGroupsTest < MiniTest::Spec
       end
 
       validation :default do
-        configure { |config|
+        configure do
           # config.messages_file = 'test/fixtures/dry_error_messages.yml'
-        }
+
+          # message need to be defined on fixtures/dry_error_messages
+          # d-v expects you to define your custome messages on the .yml file
+          def good_musical_taste?(value)
+            value != 'Nickelback'
+          end
+
+          def form_access_validation?(value)
+            form.title == 'Reform'
+          end
+        end
 
         key(:title) do |title|
           title.filled? & title.good_musical_taste?
         end
 
         key(:title, &:form_access_validation?)
-
-        # message need to be defined on fixtures/dry_error_messages
-        # d-v expects you to define your custome messages on the .yml file
-        def good_musical_taste?(value)
-          value != 'Nickelback'
-        end
-
-        def form_access_validation?(value)
-          form.title == 'Reform'
-        end
       end
     end
 
